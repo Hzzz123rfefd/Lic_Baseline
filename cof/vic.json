@@ -1,0 +1,7 @@
+{
+    "image_channel":3,
+    "image_height":512,
+    "image_weight":512,
+    "out_channel_m":192,
+    "out_channel_n":128
+}

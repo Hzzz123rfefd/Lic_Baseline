@@ -1,0 +1,9 @@
+{
+    "image_channel":3,
+    "image_height":512,
+    "image_weight":512,
+    "patch_size":2,
+    "embedding_dim":40,
+    "out_channel_m":192,
+    "out_channel_n":128
+}
