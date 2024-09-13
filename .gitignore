@@ -1,0 +1,6 @@
+model/*
+__pycache__
+build/*
+compressai.egg-info
+data/*
+*.so
