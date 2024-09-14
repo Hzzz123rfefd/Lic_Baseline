@@ -4,3 +4,4 @@ build/*
 compressai.egg-info
 data/*
 *.so
+version.py
