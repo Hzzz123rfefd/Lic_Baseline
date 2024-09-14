@@ -2,7 +2,14 @@
 Training and inference of models related to learnning image compress network
 
 ## Installation
-
+```bash
+conda create -n lic python=3.10
+conda activate lic
+git clone https://github.com/Hzzz123rfefd/Lic_Baseline.git
+cd lic
+pip install -r requirements.txt
+pip install -e .
+```
 ## Usage
 ### Model Config
 1、You need to first configure the __init__ parameter of the image compression model in <cof> dir.
