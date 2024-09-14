@@ -1,7 +1,6 @@
 import numpy as np
 import torch
 from torch.utils.data import Dataset, DataLoader
-from config import *
 
 class MyDataset(Dataset):
     def __init__(self, data1, is_train):
