@@ -7,7 +7,6 @@ class MyDataset(Dataset):
         self.data1 = data1
         self.is_train = is_train
         
-        # 计算训练数据和测试数据的数量
         total_samples = len(data1)
         self.train_samples = int(0.7 * total_samples)
         self.test_samples = total_samples - self.train_samples
@@ -20,10 +19,8 @@ class MyDataset(Dataset):
 
     def __getitem__(self, idx):
         if self.is_train:
-            # 返回训练数据
             return torch.tensor(self.data1[idx], dtype=torch.float32)
         else:
-            # 返回测试数据
             offset = self.train_samples
             return torch.tensor(self.data1[offset + idx], dtype=torch.float32)
 
