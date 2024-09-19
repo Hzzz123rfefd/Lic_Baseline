@@ -57,3 +57,50 @@ python train.py --model_name stf
                 --save_model_dir "./model/"  \
                 --device cuda
 ```
+### Image Codec
+#### compress
+Now,you can compress your raw image data through LIC
+TODO: 
+1、Currently, only PNG files are supported for reading, and in the future, the raw files of images should be directly read
+2、After training a sufficient number of bitrate models, the user should specify the compression quality and automatically select the compression model without specifying the model path
+* sh
+```bash
+python example/codec.py encode \
+            --model_name {name of your model} \
+            --image_path {path of your image (only png format now)} \ 
+            --output_path_y {path of bitstream(y.bin)} \
+            --output_path_z {path of bitstream(z.bin)} \ 
+            --pre_model_path {path of model}} \
+            --device "cpu"
+```
+* example
+```bash
+python example/codec.py encode \
+            --model_name stf  \
+            --image_path "data/image.png" \
+            --output_path_y "data/y.bin" \
+            --output_path_z "data/z.bin" \
+            --pre_model_path "model/stf/lambda = 0.0001/model.pth" \
+            --device "cpu"
+```
+#### decompress
+Now, you can extract your images from the binary stream
+```bash
+python example/codec.py decode \
+            --model_name {name of your model} \
+            --path_y "data/y.bin" \
+            --path_z "data/z.bin" \
+            --output_image_path "data/re.png" \
+            --pre_model_path "model/stf/lambda = 0.0001/model.pth" \
+            --device "cpu"
+```
+* example
+```bash
+python example/codec.py decode \
+            --model_name stf  \
+            --path_y {path of bitstream(y.bin)} \
+            --path_z {path of bitstream(z.bin)} \
+            --output_image_path {path of image to save} \
+            --pre_model_path {path of model} \
+            --device "cpu"
+```
