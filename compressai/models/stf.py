@@ -1,34 +1,11 @@
-import math
-import torch.nn as nn
 from compressai.modules import *
 from compressai.entropy_models import *
 from .base import *
-# From Balle's tensorflow compression examples
-SCALES_MIN = 0.11
-SCALES_MAX = 256
-SCALES_LEVELS = 64
 
-
-def get_scale_table(min=SCALES_MIN, max=SCALES_MAX, levels=SCALES_LEVELS):
-    """Returns table of logarithmically scales."""
-    return torch.exp(torch.linspace(math.log(min), math.log(max), levels))
-
-def config_model(args):
-    args.image_channel = 3
-    args.image_height = 512
-    args.image_width = 512
-    args.patch_size = 2
-    args.embedding_dim = 40
-    args.m = 192
-    args.n = 128
-    args.z_h = 8
-    args.z_w = 8
-    return args
 
 class STF(CompressionModel):
     def __init__(self,image_channel,image_height,image_weight,patch_size,embedding_dim,out_channel_m,out_channel_n):
-        super().__init__()
-        self.image_shape = [image_channel,image_height,image_weight]
+        super().__init__(image_channel,image_height,image_weight,out_channel_m,out_channel_n)
         self.patch_size = patch_size
         self.embed_dim = embedding_dim
         self.feather_shape = [embedding_dim*8,
@@ -50,6 +27,7 @@ class STF(CompressionModel):
                                                                                     out_channel_n = out_channel_n)
         self.entropy_bottleneck = EntropyBottleneck(out_channel_n)
         self.gaussian_conditional = GaussianConditional(None)
+
     def forward(self,image):
         """ forward transformation """
         y = self.image_transform_encoder(image)
@@ -108,30 +86,6 @@ class STF(CompressionModel):
         image = image.squeeze(0) * 255
         image = torch.round(image)
         return image
+    
 
-    def update(self, scale_table=None, force=False, update_quantiles: bool = False):
-        """Updates EntropyBottleneck and GaussianConditional CDFs.
-
-        Needs to be called once after training to be able to later perform the
-        evaluation with an actual entropy coder.
-
-        Args:
-            scale_table (torch.Tensor): table of scales (i.e. stdev)
-                for initializing the Gaussian distributions
-                (default: 64 logarithmically spaced scales from 0.11 to 256)
-            force (bool): overwrite previous values (default: False)
-            update_quantiles (bool): fast update quantiles (default: False)
-
-        Returns:
-            updated (bool): True if at least one of the modules was updated.
-        """
-        if scale_table is None:
-            scale_table = get_scale_table()
-        updated = False
-        for _, module in self.named_modules():
-            if isinstance(module, EntropyBottleneck):
-                updated |= module.update(force=force)
-            if isinstance(module, GaussianConditional):
-                updated |= module.update_scale_table(scale_table, force=force)
-        return updated
 
