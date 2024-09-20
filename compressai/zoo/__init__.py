@@ -13,11 +13,12 @@
 # limitations under the License.
 
 
-from compressai.models import STF,VIC
+from compressai.models import STF,VIC,CDC
 
 from .pretrained import load_pretrained as load_state_dict
 
 models = {
     'stf': STF,
-    'vic':VIC
+    'vic':VIC,
+    'cdc':CDC
 }
