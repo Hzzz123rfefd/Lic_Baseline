@@ -72,6 +72,8 @@ def train_one_epoch(
         optimizer.zero_grad()
 
         """ forward """
+        used_memory = 0
+        after_used_memory = 0
         if device.type == "cuda":
             used_memory = torch.cuda.memory_allocated(torch.cuda.current_device()) / (1024 ** 3)  
         output = model(image_data)
