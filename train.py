@@ -72,9 +72,7 @@ def train_one_epoch(
         optimizer.zero_grad()
 
         """ forward """
-        used_memory = 0
-        after_used_memory = 0
-        if device == "cuda":
+        if device.type == "cuda":
             used_memory = torch.cuda.memory_allocated(torch.cuda.current_device()) / (1024 ** 3)  
         output = model(image_data)
 
@@ -83,7 +81,7 @@ def train_one_epoch(
         target["image"] = image_data
         out_criterion = criterion(output, target)
 
-        if device == "cuda":
+        if device.type == "cuda":
             after_used_memory = torch.cuda.memory_allocated(torch.cuda.current_device()) / (1024 ** 3) 
         out_criterion["loss"].backward()
 
@@ -186,7 +184,7 @@ def main(args):
     """ get net parameters"""
     first = False  # a flag, is model existting
     model_name =  "lambda = " + str(args.lamda)
-    log_path = args.save_model_dir + args.model_name + "/" + model_name + "/model.pth"
+    log_path = args.save_model_dir + args.model_name + "/" + model_name + "/train.log"
     check_point_path = args.save_model_dir + args.model_name + "/" + model_name + "/model.pth"
     # model is not exist,need to init 
     if not os.path.isdir(args.save_model_dir + args.model_name + "/" + model_name):
@@ -261,14 +259,14 @@ def main(args):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument("--model_name",type = str,default = "vic")
+    parser.add_argument("--model_name",type = str,default = "cdc")
     parser.add_argument('--datasets_path',type=str, default="data/shuffled_data_512.npy")
     parser.add_argument('--data_size',type=int, default=600)
     parser.add_argument('--image_channel',type=int, default=3)
     parser.add_argument('--image_weight',type=int, default=512)
     parser.add_argument('--image_height',type=int, default=512)
     parser.add_argument('--lamda',type=float,default=0.0001)
-    parser.add_argument('--batch_size',type=int, default=16)
+    parser.add_argument('--batch_size',type=int, default=2)
     parser.add_argument('--lr',type=float,default=0.0001)
     parser.add_argument('--epoch',type=int,default=1000)
     parser.add_argument('--clip_max_norm',type=float,default=0.5)
