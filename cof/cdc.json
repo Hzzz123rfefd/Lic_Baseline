@@ -5,7 +5,7 @@
     "out_channel_m":192,
     "out_channel_n":128,
     "time_dim":40,
-    "noise_steps":20,
+    "noise_steps":4,
     "beta_start":1e-4,
     "beta_end":0.02
 }
